@@ -848,8 +848,11 @@ def main():
 
     # Start Hugging Face Spaces health check server in background thread
     threading.Thread(target=run_health_server, daemon=True).start()
+    logger.info("Allowing Hugging Face Spaces network proxy to register port 7860...")
+    time.sleep(3)  # Give HF Spaces time to verify health probe before outbound API calls
 
-    updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
+    request_kwargs = {'connect_timeout': 30., 'read_timeout': 30.}
+    updater = Updater(token=TELEGRAM_TOKEN, use_context=True, request_kwargs=request_kwargs)
     dispatcher = updater.dispatcher
 
     if SUPPORT_ID:
