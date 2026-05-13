@@ -114,13 +114,17 @@ def safe_api_call(func, *args, **kwargs):
         except RetryAfter as e:
             logger.warning(f"Flood wait! Sleeping for {e.retry_after} seconds...")
             time.sleep(e.retry_after)
-        except TimedOut:
-            logger.warning("Timeout error! Retrying in 2 seconds...")
+        except (TimedOut, NetworkError) as e:
+            logger.warning(f"Network error ({e})! Retrying in 2 seconds...")
             time.sleep(2)
         except (Unauthorized, BadRequest) as e:
             logger.error(f"API Error ({func.__name__}): {e}")
             return False
         except Exception as e:
+            if "aborted" in str(e).lower() or "disconnected" in str(e).lower() or "reset" in str(e).lower() or "timeout" in str(e).lower():
+                logger.warning(f"Connection dropped ({func.__name__}): {e}. Retrying in 2 seconds...")
+                time.sleep(2)
+                continue
             logger.error(f"Unexpected API error ({func.__name__}): {e}")
             return False
     return False
@@ -856,14 +860,16 @@ def main():
     dispatcher = updater.dispatcher
 
     if SUPPORT_ID:
-        try:
-            updater.bot.send_photo(
-                chat_id=SUPPORT_ID,
-                photo=PM_START_IMG,               
-                caption="Security & Edit Guardian Bot successfully started and protecting groups!"
-            )
-        except Exception as e:
-            logger.warning(f"Bot isn't able to send startup message to {SUPPORT_ID}: {e}")
+        threading.Thread(
+            target=safe_api_call,
+            args=(updater.bot.send_photo,),
+            kwargs={
+                "chat_id": SUPPORT_ID,
+                "photo": PM_START_IMG,
+                "caption": "Security & Edit Guardian Bot successfully started and protecting groups!"
+            },
+            daemon=True
+        ).start()
 
     # Register handlers
     dispatcher.add_handler(CommandHandler("start", start))
