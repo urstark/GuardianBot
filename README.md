@@ -1,3 +1,12 @@
+---
+title: Security & Edit Guardian Bot
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # 🚨 Security & Edit Guardian Bot
 
 A state-of-the-art all-rounder Telegram security and moderation bot built with **Python (python-telegram-bot v13)**. It merges robust **Security Bot** bad-word/NSFW screening with **Edit Guardian** accountability, ensuring groups remain transparent, safe, and professional.
