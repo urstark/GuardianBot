@@ -12,7 +12,7 @@ from Edit import PM_START_TEXT, start_buttons, PM_START_IMG, IMG
 from telegram import Update, Bot, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ChatPermissions
 from telegram.utils.helpers import escape_markdown, mention_markdown, mention_html
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, CallbackContext
-from telegram.error import RetryAfter, TimedOut, TelegramError, Unauthorized, BadRequest
+from telegram.error import RetryAfter, TimedOut, TelegramError, Unauthorized, BadRequest, NetworkError
 from pymongo import MongoClient
 from config import LOGGER, MONGO_URI, DB_NAME, TELEGRAM_TOKEN, OWNER_ID, SUDO_ID, BOT_NAME, SUPPORT_ID, SIGHTENGINE_USER, SIGHTENGINE_SECRET
 
