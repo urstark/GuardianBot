@@ -19,6 +19,5 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          # Replace 'urstark/editguardian' with your exact Hugging Face Space name if different
-          git remote add space https://urstark:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/urstark/editguardian
+          git remote add space https://urstark:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/urstark/GuardianBot
           git push --force space HEAD:main
